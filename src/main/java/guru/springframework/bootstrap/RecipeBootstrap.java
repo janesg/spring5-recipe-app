@@ -4,6 +4,7 @@ import guru.springframework.domain.*;
 import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+@Slf4j
 @Component
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -27,8 +29,6 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
         this.categoryRepository = categoryRepository;
         this.recipeRepository = recipeRepository;
         this.unitOfMeasureRepository = unitOfMeasureRepository;
-
-        getRecipes();
     }
 
     @Override
@@ -43,13 +43,13 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
                 StreamSupport.stream(unitOfMeasureRepository.findAll().spliterator(), false)
                     .collect(Collectors.toMap(UnitOfMeasure::getDescription, Function.identity()));
 
-//        uomMap.forEach((key, value) -> System.out.println("UOM Key : " + key + "/ Value : " + value));
+        uomMap.forEach((key, value) -> log.debug("UOM Key : " + key + "/ Value : " + value));
 
         Map<String, Category> categoryMap =
                 StreamSupport.stream(categoryRepository.findAll().spliterator(), false)
                         .collect(Collectors.toMap(Category::getName, Function.identity()));
 
-//        categoryMap.forEach((key, value) -> System.out.println("Category Key : " + key + "/ Value : " + value));
+        categoryMap.forEach((key, value) -> log.debug("Category Key : " + key + "/ Value : " + value));
 
         // Yummy Guacamole
         Recipe guacRecipe = new Recipe();

@@ -1,7 +1,11 @@
 package guru.springframework.domain;
 
+import lombok.*;
+
 import javax.persistence.*;
 
+@Data
+@EqualsAndHashCode(exclude = "recipe")
 @Entity
 public class RecipeNotes {
 
@@ -15,27 +19,4 @@ public class RecipeNotes {
     @Lob
     private String notes;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Recipe getRecipe() {
-        return recipe;
-    }
-
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
 }
