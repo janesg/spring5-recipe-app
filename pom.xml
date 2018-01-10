@@ -52,6 +52,13 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
+
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>3.3.7-1</version>
+        </dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -66,10 +73,9 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
-			<!-- FailSafe plugin used to run longer running Integration tests
-				 in 'verify' goal.
-				 Idea is that the quick running unit tests, via SureFire plugin, run
-				 in test goal and integration tests only run if unit tests succeed -->
+			<!-- FailSafe plugin used to run longer running Integration tests in 'verify' goal.
+				 SureFire plugin used to run the quicker unit tests in 'test' goal and
+				 integration tests only run if all unit tests succeed -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
