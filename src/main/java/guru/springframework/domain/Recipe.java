@@ -49,9 +49,11 @@ public class Recipe {
     private Set<Category> categories = new HashSet<>();
 
     public void setNotes(RecipeNotes notes) {
-        this.notes = notes;
-        // Explicit setting of the bi-directional relationship
-        this.notes.setRecipe(this);
+        if (notes != null) {
+            this.notes = notes;
+            // Explicit setting of the bi-directional relationship
+            this.notes.setRecipe(this);
+        }
     }
 
     public void setIngredients(Set<Ingredient> ingredients) {

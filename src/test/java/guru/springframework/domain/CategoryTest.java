@@ -11,6 +11,7 @@ public class CategoryTest {
 
     @Before
     public void setup() {
+
         category = new Category();
     }
 
