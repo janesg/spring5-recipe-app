@@ -69,4 +69,15 @@ public class RecipeServiceImplTest {
         assertEquals(1, recipes.size());
         verify(recipeRepository, times(1)).findAll();
     }
+
+    @Test
+    public void deleteRecipeById() {
+
+        // No 'when' mock setup, since service method returns void
+
+        recipeService.deleteById(Long.valueOf(1L));
+
+        verify(recipeRepository, times(1)).deleteById(anyLong());
+    }
+
 }
