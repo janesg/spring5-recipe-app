@@ -1,5 +1,6 @@
 package guru.springframework.services;
 
+import guru.springframework.commands.RecipeCommand;
 import guru.springframework.converters.RecipeCommandToRecipe;
 import guru.springframework.converters.RecipeToRecipeCommand;
 import guru.springframework.domain.Recipe;
@@ -27,10 +28,10 @@ public class RecipeServiceImplTest {
     private RecipeRepository recipeRepository;
 
     @Mock
-    RecipeToRecipeCommand recipeToRecipeCommand;
+    private RecipeToRecipeCommand recipeToRecipeCommand;
 
     @Mock
-    RecipeCommandToRecipe recipeCommandToRecipe;
+    private RecipeCommandToRecipe recipeCommandToRecipe;
 
     @Before
     public void setUp() {
@@ -44,12 +45,15 @@ public class RecipeServiceImplTest {
 
         Recipe recipe = new Recipe();
         recipe.setId(1L);
+        RecipeCommand recipeCmd = new RecipeCommand();
+        recipeCmd.setId(1L);
 
         Optional<Recipe> recipeOpt = Optional.of(recipe);
 
         when(recipeRepository.findById(anyLong())).thenReturn(recipeOpt);
+        when(recipeToRecipeCommand.convert(recipeOpt.get())).thenReturn(recipeCmd);
 
-        Recipe recipeRet = recipeService.findById(1L);
+        RecipeCommand recipeRet = recipeService.findById(1L);
 
         assertNotNull("Null Recipe returned", recipeRet);
         verify(recipeRepository, times(1)).findById(anyLong());
@@ -62,9 +66,12 @@ public class RecipeServiceImplTest {
         Set<Recipe> data = new HashSet<>();
         data.add(recipe);
 
-        when(recipeService.getRecipes()).thenReturn(data);
+        RecipeCommand recipeCmd = new RecipeCommand();
 
-        Set<Recipe> recipes = recipeService.getRecipes();
+        when(recipeRepository.findAll()).thenReturn(data);
+        when(recipeToRecipeCommand.convert(recipe)).thenReturn(recipeCmd);
+
+        Set<RecipeCommand> recipes = recipeService.getRecipes();
 
         assertEquals(1, recipes.size());
         verify(recipeRepository, times(1)).findAll();
@@ -75,7 +82,7 @@ public class RecipeServiceImplTest {
 
         // No 'when' mock setup, since service method returns void
 
-        recipeService.deleteById(Long.valueOf(1L));
+        recipeService.deleteById(1L);
 
         verify(recipeRepository, times(1)).deleteById(anyLong());
     }

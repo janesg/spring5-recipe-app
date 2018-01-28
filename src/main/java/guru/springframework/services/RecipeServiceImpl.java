@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -24,23 +25,29 @@ public class RecipeServiceImpl implements RecipeService {
     private final RecipeToRecipeCommand recipeToRecipeCommand;
 
     @Override
-    public Set<Recipe> getRecipes() {
+    public Set<RecipeCommand> getRecipes() {
         log.info("Get those recipes...");
 
         return StreamSupport.stream(recipeRepository.findAll().spliterator(), false)
+                .map(recipeToRecipeCommand::convert)
                 .collect(Collectors.toSet());
     }
 
     @Override
-    public Recipe findById(Long id) {
+    public RecipeCommand findById(Long id) {
 
-        return recipeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Recipe not found with ID = " + id));
+        Optional<Recipe> recipeOpt = recipeRepository.findById(id);
+
+        if (recipeOpt.isPresent()) {
+            return recipeToRecipeCommand.convert(recipeOpt.get());
+        } else {
+            throw new RuntimeException("Recipe not found with ID = " + id);
+        }
     }
 
     @Override
     @Transactional
-    public RecipeCommand saveRecipeCommand(RecipeCommand command) {
+    public RecipeCommand saveRecipe(RecipeCommand command) {
         Recipe detachedRecipe = recipeCommandToRecipe.convert(command);
 
         Recipe savedRecipe = recipeRepository.save(detachedRecipe);

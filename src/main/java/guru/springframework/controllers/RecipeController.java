@@ -1,7 +1,6 @@
 package guru.springframework.controllers;
 
 import guru.springframework.commands.RecipeCommand;
-import guru.springframework.converters.RecipeToRecipeCommand;
 import guru.springframework.services.RecipeService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 public class RecipeController {
 
     private final RecipeService recipeService;
-    private final RecipeToRecipeCommand recipeToRecipeCommand;
 
     /*
         Display a single recipe
@@ -41,7 +39,7 @@ public class RecipeController {
      */
     @GetMapping("/recipe/{id}/update")
     public String updateRecipe(@PathVariable String id, Model model) {
-        model.addAttribute("recipe", recipeToRecipeCommand.convert(recipeService.findById(Long.valueOf(id))));
+        model.addAttribute("recipe", recipeService.findById(Long.valueOf(id)));
 
         return "recipe/recipeform";
     }
@@ -49,7 +47,7 @@ public class RecipeController {
     @PostMapping("recipe")
     public String saveOrUpdate(@ModelAttribute RecipeCommand recipeCmd) {
 
-        RecipeCommand savedCmd = recipeService.saveRecipeCommand(recipeCmd);
+        RecipeCommand savedCmd = recipeService.saveRecipe(recipeCmd);
 
         return "redirect:/recipe/" + savedCmd.getId();
     }

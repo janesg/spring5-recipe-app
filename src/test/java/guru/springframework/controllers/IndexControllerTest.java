@@ -1,6 +1,6 @@
 package guru.springframework.controllers;
 
-import guru.springframework.domain.Recipe;
+import guru.springframework.commands.RecipeCommand;
 import guru.springframework.services.RecipeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,14 +11,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anySet;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -29,16 +25,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class IndexControllerTest {
 
-    IndexController indexController;
+    private IndexController indexController;
 
     @Mock
-    RecipeService recipeService;
+    private RecipeService recipeService;
 
     @Mock
-    Model model;
+    private Model model;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         MockitoAnnotations.initMocks(this);
         indexController = new IndexController(recipeService);
     }
@@ -56,18 +52,18 @@ public class IndexControllerTest {
     public void getIndexPage() {
 
         // Given
-        Set<Recipe> recipes = new HashSet<>();
-        Recipe recipe = new Recipe();
+        Set<RecipeCommand> recipes = new HashSet<>();
+        RecipeCommand recipe = new RecipeCommand();
         recipe.setId(1L);
         recipes.add(recipe);
 
-        recipe = new Recipe();
+        recipe = new RecipeCommand();
         recipe.setId(2L);
         recipes.add(recipe);
 
         when(recipeService.getRecipes()).thenReturn(recipes);
 
-        ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
+        ArgumentCaptor<Set<RecipeCommand>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
 
         // When
         String view = indexController.getIndexPage(model);
@@ -77,7 +73,7 @@ public class IndexControllerTest {
         verify(recipeService, times(1)).getRecipes();
         verify(model, times(1)).addAttribute(eq("recipes"), argumentCaptor.capture());
 
-        Set<Recipe> recipesFromController = argumentCaptor.getValue();
+        Set<RecipeCommand> recipesFromController = argumentCaptor.getValue();
         assertEquals(2, recipesFromController.size());
     }
 }
