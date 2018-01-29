@@ -48,18 +48,28 @@ public class Recipe {
         inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
 
-    public void setNotes(RecipeNotes notes) {
+    public Recipe setNotes(RecipeNotes notes) {
         if (notes != null) {
             this.notes = notes;
             // Explicit setting of the bi-directional relationship
             this.notes.setRecipe(this);
         }
+
+        return this;
     }
 
     public void setIngredients(Set<Ingredient> ingredients) {
-        this.ingredients = ingredients;
-        // Explicit setting of the bi-directional relationship
-        this.ingredients.forEach(i -> i.setRecipe(this));
+        this.ingredients = new HashSet<>();
+        ingredients.forEach(this::addIngredient);
     }
 
+    public Recipe addIngredient(Ingredient ingredient) {
+        if (ingredient != null) {
+            // Explicit setting of the bi-directional relationship
+            ingredient.setRecipe(this);
+            this.ingredients.add(ingredient);
+        }
+
+        return this;
+    }
 }
