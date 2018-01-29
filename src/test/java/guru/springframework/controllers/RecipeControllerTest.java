@@ -60,7 +60,7 @@ public class RecipeControllerTest {
     }
 
     @Test
-    public void testGetUpdateView() throws Exception {
+    public void testGetUpdateRecipeForm() throws Exception {
 
         RecipeCommand command = new RecipeCommand();
         command.setId(2L);
