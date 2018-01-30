@@ -5,7 +5,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface IngredientService {
 
-    IngredientCommand findByRecipeIdAndIngredientId(Long recipeId, Long id);
+    IngredientCommand findByRecipeIdAndIngredientId(Long recipeId, Long ingredientId);
 
     IngredientCommand saveIngredient(IngredientCommand command);
+
+    void deleteById(Long recipeId, Long ingredientId);
+
 }

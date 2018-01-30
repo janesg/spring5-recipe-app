@@ -1,6 +1,7 @@
 package guru.springframework.services;
 
 import guru.springframework.commands.IngredientCommand;
+import guru.springframework.commands.RecipeCommand;
 import guru.springframework.converters.IngredientCommandToIngredient;
 import guru.springframework.converters.IngredientToIngredientCommand;
 import guru.springframework.domain.Ingredient;
@@ -78,16 +79,48 @@ public class IngredientServiceImpl implements IngredientService {
 
             Recipe savedRecipe = recipeRepository.save(recipe);
 
-            Optional<Ingredient> ingredientCommandOptional = savedRecipe.getIngredients().stream()
-                    .filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId()))
+            // Need to pass back the saved ingredient, but can't match on id it wasn't known in case of 'new'
+            // Instead, we use a 'best guess' at a combination of attributes although not guaranteed
+            Optional<Ingredient> ingredientOpt = savedRecipe.getIngredients().stream()
+                    .filter(ingredient -> ingredient.getDescription().equals(ingredientCommand.getDescription()) &&
+                                          ingredient.getAmount().equals(ingredientCommand.getAmount()) &&
+                                          ingredient.getUom().getId().equals(ingredientCommand.getUom().getId()))
                     .findFirst();
 
-            if (ingredientCommandOptional.isPresent()) {
-                return ingredientToIngredientCommand.convert(ingredientCommandOptional.get());
+            if (ingredientOpt.isPresent()) {
+                return ingredientToIngredientCommand.convert(ingredientOpt.get());
             } else {
                 throw new RuntimeException("Failed to save ingredient for recipe (id : " + ingredientCommand.getRecipeId() + ")");
             }
         }
+    }
 
+    @Override
+    public void deleteById(Long recipeId, Long ingredientId) {
+
+        log.debug("Deleting Ingredient (id = " + ingredientId + ") from Recipe (id = " + recipeId + ")");
+
+        Optional<Recipe> recipeOptional = recipeRepository.findById(recipeId);
+
+        if (recipeOptional.isPresent()) {
+            Recipe recipe = recipeOptional.get();
+
+            Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
+                    .filter(ingredient -> ingredient.getId().equals(ingredientId))
+                    .findFirst();
+
+            if (ingredientOptional.isPresent()) {
+                // Have to set the recipe reference to null to get Hibernate to physically delete record
+                Ingredient ingredient = ingredientOptional.get();
+                ingredient.setRecipe(null);
+
+                recipe.getIngredients().remove(ingredientOptional.get());
+                recipeRepository.save(recipe);
+            } else {
+                throw new RuntimeException("Failed to find ingredient (id : " + ingredientId + ") for recipe (id : " + recipeId + ")");
+            }
+        } else {
+            throw new RuntimeException("Failed to find recipe (id : " + recipeId + ")");
+        }
     }
 }
