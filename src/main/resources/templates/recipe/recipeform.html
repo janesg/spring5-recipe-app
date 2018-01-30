@@ -65,10 +65,12 @@
                                 </div>
                                 <div class="col-md-3 form-group">
                                     <label>Difficulty:</label>
-                                    <select class="form-control">
-                                        <option>Easy</option>
-                                        <option>Medium</option>
-                                        <option>Hard</option>
+                                    <select class="form-control" th:field="*{difficulty}">
+                                        <!-- IntelliJ can't see Enum.values() so had to add a static proxy method to Difficulty -->
+                                        <option th:each="difficultyValue : ${{T(guru.springframework.domain.Difficulty).getValues()}}"
+                                                th:value="${difficultyValue.name()}"
+                                                th:text="${difficultyValue.name()}">
+                                        </option>
                                     </select>
                                 </div>
                             </div>
