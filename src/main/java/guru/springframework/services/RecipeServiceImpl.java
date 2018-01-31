@@ -4,6 +4,7 @@ import guru.springframework.commands.RecipeCommand;
 import guru.springframework.converters.RecipeCommandToRecipe;
 import guru.springframework.converters.RecipeToRecipeCommand;
 import guru.springframework.domain.Recipe;
+import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.repositories.RecipeRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +42,7 @@ public class RecipeServiceImpl implements RecipeService {
         if (recipeOpt.isPresent()) {
             return recipeToRecipeCommand.convert(recipeOpt.get());
         } else {
-            throw new RuntimeException("Recipe not found with ID = " + id);
+            throw new NotFoundException("Recipe not found with ID = " + id);
         }
     }
 
