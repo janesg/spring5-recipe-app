@@ -76,7 +76,7 @@
 			<!-- FailSafe plugin used to run longer running Integration tests in 'verify' goal.
 				 SureFire plugin used to run the quicker unit tests in 'test' goal and
 				 integration tests only run if all unit tests succeed -->
-			<plugin>
+			<!-- plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<configuration>
@@ -96,7 +96,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin -->
 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
