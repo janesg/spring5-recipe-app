@@ -1,0 +1,12 @@
+alter table ingredient drop foreign key FKj0s4ywmqqqw4h5iommigh5yja;
+alter table ingredient drop foreign key FK6iv5l89qmitedn5m2a71kta2t;
+alter table recipe drop foreign key FKcwdyqod6poaoxt3lleysl13au;
+alter table recipe_category drop foreign key FKqsi87i8d4qqdehlv2eiwvpwb;
+alter table recipe_category drop foreign key FKcqlqnvfyarhieewfeayk3v25v;
+alter table recipe_notes drop foreign key FKg0fxod13o1up2iu1yksjjw2d5;
+drop table if exists category;
+drop table if exists ingredient;
+drop table if exists recipe;
+drop table if exists recipe_category;
+drop table if exists recipe_notes;
+drop table if exists unit_of_measure;
