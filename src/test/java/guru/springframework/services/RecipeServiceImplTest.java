@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -45,19 +45,19 @@ public class RecipeServiceImplTest {
     public void getRecipeById() {
 
         Recipe recipe = new Recipe();
-        recipe.setId(1L);
+        recipe.setId("1");
         RecipeCommand recipeCmd = new RecipeCommand();
-        recipeCmd.setId(1L);
+        recipeCmd.setId("1");
 
         Optional<Recipe> recipeOpt = Optional.of(recipe);
 
-        when(recipeRepository.findById(anyLong())).thenReturn(recipeOpt);
+        when(recipeRepository.findById(anyString())).thenReturn(recipeOpt);
         when(recipeToRecipeCommand.convert(recipeOpt.get())).thenReturn(recipeCmd);
 
-        RecipeCommand recipeRet = recipeService.findById(1L);
+        RecipeCommand recipeRet = recipeService.findById("1");
 
         assertNotNull("Null Recipe returned", recipeRet);
-        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, times(1)).findById(anyString());
     }
 
     @Test(expected = NotFoundException.class)
@@ -65,9 +65,9 @@ public class RecipeServiceImplTest {
 
         Optional<Recipe> recipeOptional = Optional.empty();
 
-        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+        when(recipeRepository.findById(anyString())).thenReturn(recipeOptional);
 
-        recipeService.findById(1L);
+        recipeService.findById("1");
     }
 
     @Test
@@ -93,9 +93,9 @@ public class RecipeServiceImplTest {
 
         // No 'when' mock setup, since service method returns void
 
-        recipeService.deleteById(1L);
+        recipeService.deleteById("1");
 
-        verify(recipeRepository, times(1)).deleteById(anyLong());
+        verify(recipeRepository, times(1)).deleteById(anyString());
     }
 
 }

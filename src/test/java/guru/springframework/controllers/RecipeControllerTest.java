@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
@@ -43,9 +43,9 @@ public class RecipeControllerTest {
     public void testGetRecipe() throws Exception {
 
         RecipeCommand recipe = new RecipeCommand();
-        recipe.setId(1L);
+        recipe.setId("1");
 
-        when(recipeService.findById(anyLong())).thenReturn(recipe);
+        when(recipeService.findById(anyString())).thenReturn(recipe);
 
         mockMvc.perform(get("/recipe/1"))
                 .andExpect(status().isOk())
@@ -56,7 +56,7 @@ public class RecipeControllerTest {
     @Test
     public void testGetRecipeNotFound() throws Exception {
 
-        when(recipeService.findById(anyLong())).thenThrow(NotFoundException.class);
+        when(recipeService.findById(anyString())).thenThrow(NotFoundException.class);
 
         mockMvc.perform(get("/recipe/122222"))
                 .andExpect(status().isNotFound())
@@ -84,9 +84,9 @@ public class RecipeControllerTest {
     public void testGetUpdateRecipeForm() throws Exception {
 
         RecipeCommand command = new RecipeCommand();
-        command.setId(2L);
+        command.setId("2");
 
-        when(recipeService.findById(anyLong())).thenReturn(command);
+        when(recipeService.findById(anyString())).thenReturn(command);
 
         mockMvc.perform(get("/recipe/2/update"))
                 .andExpect(status().isOk())
@@ -98,7 +98,7 @@ public class RecipeControllerTest {
     public void testPostNewRecipe() throws Exception {
 
         RecipeCommand command = new RecipeCommand();
-        command.setId(2L);
+        command.setId("2");
 
         when(recipeService.saveRecipe(any())).thenReturn(command);
 
@@ -114,7 +114,7 @@ public class RecipeControllerTest {
     public void testPostNewRecipeFormValidationFail() throws Exception {
 
         RecipeCommand command = new RecipeCommand();
-        command.setId(2L);
+        command.setId("2");
 
         when(recipeService.saveRecipe(any())).thenReturn(command);
 
@@ -136,7 +136,7 @@ public class RecipeControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
 
-        verify(recipeService, times(1)).deleteById(anyLong());
+        verify(recipeService, times(1)).deleteById(anyString());
     }
 
 }

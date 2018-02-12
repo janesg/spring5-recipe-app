@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 
 public class RecipeNotesCommandToRecipeNotesTest {
 
-    private static final Long ID_VALUE = new Long(1L);
+    private static final String ID_VALUE = "1";
     private static final String RECIPE_NOTES = "Notes";
 
     RecipeNotesCommandToRecipeNotes converter;

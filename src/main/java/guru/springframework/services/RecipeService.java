@@ -9,10 +9,10 @@ public interface RecipeService {
 
     Set<RecipeCommand> getRecipes();
 
-    RecipeCommand findById(Long id);
+    RecipeCommand findById(String id);
 
     RecipeCommand saveRecipe(RecipeCommand command);
 
-    void deleteById(Long id);
+    void deleteById(String id);
 
 }

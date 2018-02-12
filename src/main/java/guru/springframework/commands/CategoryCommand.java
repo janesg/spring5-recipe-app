@@ -10,6 +10,6 @@ import lombok.Setter;
 public class CategoryCommand {
 
     // Member attributes match those in Category
-    private Long id;
+    private String id;
     private String name;
 }
