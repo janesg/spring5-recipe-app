@@ -111,7 +111,6 @@ public class IngredientServiceImpl implements IngredientService {
             if (ingredientOptional.isPresent()) {
                 // Have to set the recipe reference to null to get Hibernate to physically delete record
                 Ingredient ingredient = ingredientOptional.get();
-                ingredient.setRecipe(null);
 
                 recipe.getIngredients().remove(ingredientOptional.get());
                 recipeRepository.save(recipe);
