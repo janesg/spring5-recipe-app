@@ -53,6 +53,9 @@
                                 <div class="col-md-3 form-group">
                                     <label>Categories:</label>
                                 </div>
+                                <div th:each="catEach, idx : ${recipe.categories}" >
+                                    <input type="hidden" th:field="*{categories[__${idx.index}__].id}" />
+                                </div>
                                 <div class="col-md-9 form-group">
                                     <div class="radio">
                                         <label>
@@ -160,6 +163,13 @@
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-12">
+                                    <!-- Create a hidden array of ingredients they are so available for Mongo update merge -->
+                                    <div th:each="ingredientEach, idx : ${recipe.ingredients}" >
+                                        <input  type="hidden" th:field="*{ingredients[__${idx.index}__].id}" />
+                                        <input  type="hidden" th:field="*{ingredients[__${idx.index}__].description}" />
+                                        <input  type="hidden" th:field="*{ingredients[__${idx.index}__].amount}" />
+                                        <input  type="hidden" th:field="*{ingredients[__${idx.index}__].uom.id}" />
+                                    </div>
                                     <ul th:if="${not #lists.isEmpty(recipe.ingredients)}">
                                         <li th:remove="all">1 Cup of milk</li>
                                         <li th:remove="all">1 Teaspoon of chocolate</li>
